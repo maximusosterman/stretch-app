@@ -13,7 +13,7 @@ export function getProgram(req: Request, res: Response) {
     const id = Number(req.params.id)
     const program = programs.find(program => program.id === id)
 
-    if (!program) return res.status(404).send("Program not found!")
+    if (!program) return res.status(404).json("Program not found!")
     res.status(200).json(program)
 }
 
@@ -21,7 +21,7 @@ export function createProgram(req: Request, res: Response) {
 
     const { name, exercises, description, userID } = req.body
 
-    if (!name || !exercises || !userID ) return res.status(401).json("Please enter a program name, description, exercises and user")
+    if (!name || !exercises || !userID ) return res.status(403).json("Please enter a program name, description, exercises and user")
 
     const createdProgram: Program = {
         id: programs.length + 1,
@@ -32,6 +32,24 @@ export function createProgram(req: Request, res: Response) {
     }
 
     res.status(201).json(createdProgram)
+
+}
+
+export function updateProgram(req: Request, res: Response) {
+
+    const id = Number(req.params.id)
+    const { name, exercises, description } = req.body
+    const program = programs.find(program => program.id === id)
+
+    if (!program) return res.status(404).json("Program not found!")
+
+    program.name = name
+    program.description = description
+    program.exercises = exercises
+
+    const newProgram = programs.find(program => program.id === id)
+
+    res.status(200).json(newProgram)
 
 }
 

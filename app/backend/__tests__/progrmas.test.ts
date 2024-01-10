@@ -1,7 +1,7 @@
 import supertest from 'supertest'
 import app from '../src/server'
 
-import { Exercise } from '../src/interfaces'
+import { Exercise, Program } from '../src/interfaces'
 
 /*
 PROGRAM OBJECT
@@ -55,6 +55,17 @@ describe("GET /programs/:id | READ", () => {
         })
     })
 
+    it("shoudl return a 404 when not found", async () => {
+
+        return supertest(app).get("/programs/notFoundID")
+        .expect(404)
+        .expect("Content-Type", /json/)
+        .then(response => {
+            expect(response.body).toContain("Program not found!")
+        })
+
+    })
+
 })
 
 describe("POST /programs | CREATE", () => {
@@ -86,12 +97,12 @@ describe("POST /programs | CREATE", () => {
 
     })
 
-    it("shoudl return a 401 when not sending valid data",  async() => {
+    it("should return a 403 when not sending valid data",  async() => {
         
         return supertest(app).post("/programs").send({
             notValid: "Object"
         })
-        .expect(401)
+        .expect(403)
         .expect("Content-Type", /json/)
         .then(response => {
             expect(response.body).toContain("Please enter a program name, description, exercises and user")
@@ -101,18 +112,50 @@ describe("POST /programs | CREATE", () => {
 
 })
 
+describe("PUT /programs/:id | UPDATE", () => {
+    
+    it("should return a 200 and the updated program object", async() => {
+        const programID = 1
+        const updatedProgram: Program = {
+            id: programID,
+            name: "Updated program",
+            description: "This is a new description",
+            exercises: [1, 2, 55, 2],
+            userID: 1
+        }
+        return supertest(app).put(`/programs/${programID}`).send(updatedProgram)
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .then(response => {
+            expect(response.body).toMatchObject(updatedProgram)
+        })
+    })
+
+    it("shoudl return a 404 when not found", async () => {
+
+        return supertest(app).put("/programs/notFoundID")
+        .expect(404)
+        .expect("Content-Type", /json/)
+        .then(response => {
+            expect(response.body).toContain("Program not found!")
+        })
+
+    })
+
+})
+
 // Implement for loops for testing more failing outcomes
 
-// GET /programs | READ
+// GET /programs | READ [x]
     // Shoudl return a 200 and all of the program. If not 404
 
-// GET /programs/:id | READ
+// GET /programs/:id | READ [x]
     //SHould return a 200 and a program
 
-// POST /programs/ | CREATE
+// POST /programs/ | CREATE [x]
     //Should return a 201 and the created program
 
-// PUT /programs/:id | UPDATE
+// PUT /programs/:id | UPDATE 
     //Should return a 200 and the updated program
 
 // DELETE /programs/:id | DELETE
