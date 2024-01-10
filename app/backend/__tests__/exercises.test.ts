@@ -20,7 +20,6 @@ describe("GET /exercieses | READ", () => {
         })
 
     })
-
 })
 
 describe("GET /exercieses/:id | READ", () => {

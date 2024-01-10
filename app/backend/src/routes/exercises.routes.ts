@@ -1,4 +1,5 @@
 import express from 'express'
+
 import { getAllExercises, getExercise, createExercise, updateExercise } from '../controllers/exercises.controllers';
 
 const router = express.Router();
