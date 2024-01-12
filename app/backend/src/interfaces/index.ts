@@ -4,7 +4,7 @@ export interface User {
     fullname: string
     email: string
     password: string
-    programs: Program[]
+    programsID: Program["id"][]
 }
 
 export interface Exercise {

@@ -3,6 +3,7 @@ import cors from 'cors'
 
 import exercisesRouter from './routes/exercises.routes'
 import programsRouter from './routes/programs.routes'
+import usersRouter from './routes/users.routes'
 
 import { serverErrorCatcher } from './controllers/errorHandler.controllers';
 import log from './utils/logger';
@@ -17,6 +18,8 @@ app.use(cors());
 //Routes
 app.use(exercisesRouter)
 app.use(programsRouter)
+app.use(usersRouter)
+
 
 app.listen(PORT, () => {
     log.info(`Server listening on port ${PORT}`)
